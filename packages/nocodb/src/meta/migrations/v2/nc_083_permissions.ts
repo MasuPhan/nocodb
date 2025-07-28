@@ -11,6 +11,10 @@ const up = async (knex: Knex) => {
     table.string('entity', 255); // table, column etc.
     table.string('entity_id', 255); // table id, column id etc.
 
+    // matrix specific ids for row and column
+    table.string('row_id', 20);
+    table.string('column_id', 20);
+
     table.string('permission', 255); // TABLE_RECORD_ADD, TABLE_RECORD_DELETE, FIELD_EDIT etc.
 
     table.string('created_by', 20); // user id
@@ -27,6 +31,7 @@ const up = async (knex: Knex) => {
 
     table.index(['base_id', 'fk_workspace_id'], 'nc_permissions_context');
     table.index(['entity', 'entity_id', 'permission'], 'nc_permissions_entity');
+    table.index(['row_id', 'column_id', 'permission'], 'nc_permissions_cell');
   });
 
   await knex.schema.createTable(MetaTable.PERMISSION_SUBJECTS, (table) => {
