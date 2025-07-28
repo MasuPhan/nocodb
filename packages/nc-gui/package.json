@@ -34,7 +34,8 @@
     "ci:run": "export NODE_OPTIONS=\"--max_old_space_size=16384\"; pnpm install; pnpm run build; NUXT_PAGE_TRANSITION_DISABLE=true NUXT_PUBLIC_NC_BACKEND_URL=http://localhost:8080 pnpm run start &",
     "ci:start": "export NODE_OPTIONS=\"--max_old_space_size=16384\"; NUXT_PAGE_TRANSITION_DISABLE=true NUXT_PUBLIC_NC_BACKEND_URL=http://localhost:8080 pnpm run start &",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prebuild": "pnpm --dir ../nocodb-sdk run build"
   },
   "dependencies": {
     "@ckpack/vue-color": "^1.6.0",
