@@ -7,6 +7,7 @@ import {
   ProjectRoles,
   SourceRestriction,
 } from 'nocodb-sdk';
+import { CellPermissionMatrixService } from '~/services/cell-permission-matrix.service';
 import { map } from 'rxjs';
 import type { Observable } from 'rxjs';
 import type {
@@ -421,7 +422,10 @@ function getUserRoleForScope(user: any, scope: string) {
 
 @Injectable()
 export class AclMiddleware implements NestInterceptor {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly cellPermissionMatrixService: CellPermissionMatrixService,
+  ) {}
 
   async aclFn(
     permissionName: string,
@@ -518,14 +522,29 @@ export class AclMiddleware implements NestInterceptor {
           })));
     if (!isAllowed) {
       NcError.permissionDenied(permissionName, roles, extendedScopeRoles);
+    }
 
-      // NcError.forbidden(
-      //
-      //
-      //   `${permissionName} - ${getRolesLabels(
-      //     Object.keys(roles).filter((k) => roles[k]),
-      //   )} : Not allowed`,
-      // );
+    if (
+      (permissionName === 'dataRead' || permissionName === 'dataUpdate') &&
+      req.params?.rowId &&
+      req.params?.columnId
+    ) {
+      const access = await this.cellPermissionMatrixService.getCellAccess(
+        req.context,
+        {
+          rowId: req.params.rowId,
+          columnId: req.params.columnId,
+          role: userScopeRole as any,
+        },
+      );
+
+      if (permissionName === 'dataRead' && access === 'none') {
+        NcError.permissionDenied(permissionName, roles, extendedScopeRoles);
+      }
+
+      if (permissionName === 'dataUpdate' && access !== 'edit') {
+        NcError.permissionDenied(permissionName, roles, extendedScopeRoles);
+      }
     }
 
     // check if permission have source level permission restriction

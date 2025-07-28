@@ -151,6 +151,8 @@ import { TablesV3Service } from '~/services/v3/tables-v3.service';
 import { ViewsV3Service } from '~/services/v3/views-v3.service';
 import { ViewRowColorController } from '~/controllers/view-row-color.controller';
 import { AttachmentUrlUploadHandler } from '~/services/emit-handler/attachment-url-upload.handler';
+import { CellPermissionMatrixController } from '~/controllers/cell-permission-matrix.controller';
+import { CellPermissionMatrixService } from '~/services/cell-permission-matrix.service';
 
 /* ACL */
 import { AclMiddleware } from '~/middlewares/extract-ids/extract-ids.middleware';
@@ -221,6 +223,7 @@ export const nocoModuleMetadata = {
           ExtensionsController,
           JobsMetaController,
           IntegrationsController,
+          CellPermissionMatrixController,
           InternalController,
 
           // MCP
@@ -317,6 +320,7 @@ export const nocoModuleMetadata = {
     McpTokenService,
     McpService,
     ViewRowColorService,
+    CellPermissionMatrixService,
 
     /* Datas */
     DataTableService,
@@ -374,6 +378,7 @@ export const nocoModuleMetadata = {
     IntegrationsService,
     NocoJobsService,
     ViewRowColorService,
+    CellPermissionMatrixService,
 
     /* Datas */
     DatasService,

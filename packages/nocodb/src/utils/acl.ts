@@ -180,6 +180,9 @@ const permissionScopes = {
     'mcpCreate',
     'mcpUpdate',
     'mcpDelete',
+    'cellPermissionSet',
+    'cellPermissionGet',
+    'cellPermissionDelete',
   ],
 };
 
@@ -318,6 +321,11 @@ const rolePermissions:
     },
   },
   [ProjectRoles.OWNER]: {
+    include: {
+      cellPermissionSet: true,
+      cellPermissionGet: true,
+      cellPermissionDelete: true,
+    },
     exclude: {
       pluginList: true,
       pluginTest: true,
@@ -691,6 +699,9 @@ const permissionDescriptions: Record<string, string> = {
   mcpCreate: 'create a new MCP token',
   mcpUpdate: 'update an MCP token',
   mcpDelete: 'delete an MCP token',
+  cellPermissionSet: 'update cell permissions',
+  cellPermissionGet: 'view cell permissions',
+  cellPermissionDelete: 'delete cell permissions',
 };
 
 // Human-readable descriptions for roles
